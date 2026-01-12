@@ -1,0 +1,31 @@
+
+
+
+probe
+{
+    // Where to load it from
+    libs            ("sampling");
+
+    type            probes;
+
+    // Name of the directory for probe data
+    name            probes;
+    interpolationScheme cellPoint;
+
+    // Write at same frequency as fields
+    writeControl    timeStep;
+    writeInterval   10;
+
+    // Fields to be probed
+    fields
+    (
+            Pxx
+        );
+
+    probeLocations
+    (
+        ( 0 0.5 0.5 )        // at fixed end
+
+    );
+
+}

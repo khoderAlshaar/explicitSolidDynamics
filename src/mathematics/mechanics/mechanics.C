@@ -192,9 +192,9 @@ void mechanics::time
     runTime++;
     tStep_++;
 
-    Info<< "\nTime step =" << tStep_ << nl
-        << "Time increment = " << runTime.deltaTValue() << " s" << nl
-        << "Time = " << runTime.timeName() << " s" << endl;
+    Info<< "\nTime step =" << tStep_ << nl << endl;
+        // << "Time increment = " << runTime.deltaTValue() << " s" << nl
+    Info<< "\n Time = " << runTime.value() << nl << endl;
 }
 
 

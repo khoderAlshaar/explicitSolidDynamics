@@ -14,10 +14,8 @@ cd ../models
 cd ../schemes
 ./compile
 
-cd ../../applications/solvers/solidFoam
-./compile
 
-cd ../plasticFoam
+cd ../solidRoeFoam
 ./compile
 
 cd ../../utilities/initialConditions

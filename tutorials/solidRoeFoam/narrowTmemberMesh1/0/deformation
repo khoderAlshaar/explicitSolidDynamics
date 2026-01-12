@@ -1,0 +1,57 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volTensorField;
+    location    "0";
+    object      deformation;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform (1 0 0 0 1 0 0 0 1);
+
+boundaryField
+{
+    symmetricZ
+    {
+        type            calculated;
+        value           uniform (1 0 0 0 1 0 0 0 1);
+    }
+    front
+    {
+        type            calculated;
+        value           uniform (1 0 0 0 1 0 0 0 1);
+    }
+    symmetricX
+    {
+        type            calculated;
+        value           uniform (1 0 0 0 1 0 0 0 1);
+    }
+    loading
+    {
+        type            calculated;
+        value           uniform (1 0 0 0 1 0 0 0 1);
+    }
+    fixed
+    {
+        type            calculated;
+        value           uniform (1 0 0 0 1 0 0 0 1);
+    }
+    tractionFree
+    {
+        type            calculated;
+        value           uniform (1 0 0 0 1 0 0 0 1);
+    }
+}
+
+
+// ************************************************************************* //

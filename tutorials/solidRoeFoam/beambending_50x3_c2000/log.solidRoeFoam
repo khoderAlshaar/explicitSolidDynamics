@@ -1,0 +1,77 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 7-1ff648926f77
+Exec   : solidRoeFoam
+Date   : Jan 12 2026
+Time   : 17:10:12
+Host   : "KhoderSystem"
+PID    : 3260
+I/O    : uncollated
+Case   : /home/khoder/myExplicitSolidDynamics/explicitSolidDynamics/tutorials/solidRoeFoam/beambending_50x3_c2000
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Reading dictionaries ...
+Reading data from dictionaries ...
+solution tolerance: 1e-06
+dampingCoeff: 1092.0599
+Creating mesh parameters ...
+Creating mesh coordinate fields ...
+Creating mesh normal fields ...
+Creating linear momentum fields ...
+Creating strain measure fields ...
+Creating constitutive model ...
+Creating fields for wave speeds ...
+Creating fields for gradient ...
+ reconstruction scheme order: second
+ Limiter: yes
+Creating fields for reconstruction ...
+Creating fields for riemann solver ...
+Creating fields for angular momentum ...
+Creating fields for post-processing ...
+Creating variables for time ...
+Printing data ...
+
+Printing material properties ...
+Constitutive model = linearElastic
+Density = 7600 [1 -3 0 0 0 0 0]
+Young's modulus = 2.2e+11 [1 -1 -2 0 0 0 0]
+Poisson's ratio = 0.3 [0 0 0 0 0 0 0]
+Lame's first parameter lambda = 1.2692308e+11 [1 -1 -2 0 0 0 0]
+Lame's second parameter mu = 8.4615385e+10 [1 -1 -2 0 0 0 0]
+Bulk modulus kappa = 1.8333333e+11 [1 -1 -2 0 0 0 0]
+Linear pressure wave speed = 6242.4043 [0 1 -1 0 0 0 0]
+Linear shear wave speed = 3336.7054 [0 1 -1 0 0 0 0]
+
+Printing global momentums ...
+Global linear momentum = (0 0 0)
+Global angular momentum = (0 0 0)
+
+Centroid of geometry = (0.025 0.0005 0.0005)
+Creating fields for the constrained procedure ...
+Creating displacement_prop function object
+    region = region0
+    distance from specified point is 0.00052704628
+Creating displacementAlongLine function object
+    region = region0
+
+--> FOAM FATAL IO ERROR: 
+wrong token type - expected Scalar, found on line 77 the punctuation token ')'
+
+file: /home/khoder/myExplicitSolidDynamics/explicitSolidDynamics/tutorials/solidRoeFoam/beambending_50x3_c2000/system/controlDict.functions.displacementAlongLine.startPoint at line 77.
+
+    From function Foam::Istream& Foam::operator>>(Foam::Istream&, Foam::doubleScalar&)
+    in file lnInclude/Scalar.C at line 101.
+

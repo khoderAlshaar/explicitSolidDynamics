@@ -1,0 +1,10 @@
+components
+{
+
+    type            components;
+    libs            ("libfieldFunctionObjects.so");
+    writeControl    timeStep;
+    writeInterval   1;
+    field         P;
+    
+}

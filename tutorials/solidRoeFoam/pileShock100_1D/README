@@ -1,0 +1,5 @@
+The post processing for the displaement field requires using paraFoam.
+1- Take the dsiplcaement distribution over a line.
+2- use the sheet view.
+3- select the correct fields (point coordienats, uN).
+4- save as .csv file.

@@ -1,0 +1,45 @@
+#!/bin/bash
+cd "${0%/*}" || exit
+source ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+
+plot_cf_lowerWall() {
+        local   pRefDirs="$pRefDirs"
+        image="plots/Pxx_RoeVSAnalatical.png"
+         gnuplot <<EOF
+
+        set terminal png font "helvetica,15" size 1000, 500
+        set grid
+        set key top right
+        set title  "stress Along Left Side"
+        set xlabel "y (m)"
+        set ylabel "stress Pxx (Pa)"
+        set output "$image"
+        set lmargin 6.5
+        set rmargin 4.5
+        set tmargin 4.5
+        set bmargin 4.5
+        set format x "%.1f"
+        set format y "%.0f"  # Plain numbers on y-axis, without exponent
+        set size ratio 0.5
+
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+
+         plot [0.5:2] [0:] "$pRefDirs/line_Pxx.xy" lt 1 dt 1 lc rgb word(colors, 1) t "Roe",\
+        1e4*(1+(0.125/(x**2))+(0.09375/(x**4))) ls 5 t "Analatical"
+       
+
+        
+EOF
+}
+
+#------------------------------------------------------------------------------------------------------------------------
+command -v gnuplot >/dev/null || { echo "FOAM FATAL ERROR: gnuplot not found - skipping graph creation" >&2; exit 1; }
+command -v awk >/dev/null || { echo "FOAM FATAL ERROR: awk not found - skipping graph creation" >&2; exit 1; }
+
+
+ timeDir=$(foamListTimes  -latestTime)
+ pRefDirs=("postProcessing/graphUniform/$timeDir")
+
+echo "# Plots the speration Zone profiles"
+plot_cf_lowerWall "$pRefDirs"

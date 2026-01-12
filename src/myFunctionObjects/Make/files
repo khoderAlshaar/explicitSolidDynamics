@@ -1,0 +1,4 @@
+solidPointDisplacementAlongLine/solidPointDisplacementAlongLine.C
+solidPointDisplacement/solidPointDisplacement.C
+
+LIB = $(FOAM_USER_LIBBIN)/myexplicitSolidDynamicsFunctionObjects

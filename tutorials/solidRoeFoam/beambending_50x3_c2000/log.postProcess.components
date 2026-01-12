@@ -1,0 +1,43 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 7-1ff648926f77
+Exec   : postProcess -func components -latestTime
+Date   : Jan 12 2026
+Time   : 17:10:12
+Host   : "KhoderSystem"
+PID    : 3261
+I/O    : uncollated
+Case   : /home/khoder/myExplicitSolidDynamics/explicitSolidDynamics/tutorials/solidRoeFoam/beambending_50x3_c2000
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Time = 0
+
+Reading fields:
+    pointVectorFields: uN
+
+Executing functionObjects
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type volVectorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type surfaceVectorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type volSphericalTensorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type surfaceSphericalTensorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type volSymmTensorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type surfaceSymmTensorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type volTensorField
+--> FOAM Warning :     functionObjects::components components cannot find required object uN of type surfaceTensorField
+--> FOAM Warning :     functionObjects::components components failed to execute.
+
+End
+

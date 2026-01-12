@@ -1,0 +1,17 @@
+Residuals
+{
+  expr "linear momentum L2 Residual: (%f%)";
+  name Residuals;
+  theTitle "Residuals";
+  titles ( "linear_momentum_L2_Residual" );
+  type regular;
+}
+
+AddRhoUToResiduals
+{
+  expr "stress L2 Residual: (%f%)";
+  titles ( "stress_L2_Residual" );
+  type slave;
+  master Residuals;
+}
+

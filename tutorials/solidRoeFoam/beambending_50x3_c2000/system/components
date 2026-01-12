@@ -1,0 +1,9 @@
+
+
+
+    type            components;
+    libs            ("libfieldFunctionObjects.so");
+    writeControl    timeStep;
+    writeInterval   100;
+    field         uN;
+    

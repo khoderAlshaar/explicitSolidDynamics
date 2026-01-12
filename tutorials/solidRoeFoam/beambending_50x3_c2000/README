@@ -1,0 +1,3 @@
+for post processing, we need the following value:
+1- The displacement at the free end of the beam.
+2- The stress Pxx at top corner of the fixed end.

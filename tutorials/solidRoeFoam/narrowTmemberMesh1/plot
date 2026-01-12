@@ -1,0 +1,617 @@
+#!/bin/bash
+cd "${0%/*}" || exit
+source ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+
+plot_U() {
+    local sampleDir="$1" Uref="$2" experimentalDataDir="$3" cases="$4" href="1" image="plots/U.png"
+   
+    lowerWallDirs="$5"
+
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,10" size 1000, 500
+        set key bottom left font ",10"  # Set the legend font size to 10
+        set grid
+        set key bottom left
+        set yrange [0:4.7]
+        set xrange [-10:52]
+        set xlabel "x/H + 10U/U_b"
+        set ylabel "y/H"
+        set output "$image"
+        set lmargin 7.5
+        set rmargin 3
+        set tmargin 1.5
+        set bmargin 1.5
+        set format x "%.1f"
+        set format y "%.1f"
+        set size ratio 0.3
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${sampleDir[*]}"
+        lowerWall="${lowerWallDirs[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+        plot \
+        for [i=1:words(models)]  ( (word(lowerWall, 1) . "/p_patch_lowerWall.raw")) using 1:2 with lines notitle lw 2 lc rgb 'black', \
+         '' u 1:2 with filledcurves y1=0 lc rgb 'gray' notitle,\
+        for [k=1:8] (j=word("-6 6 14 20 27 34 40 47", k), "$experimentalDataDir/m__U%.x".j) \
+            u (j+(\$2)*10):(\$1/href) ls 5 t (k == 1 ? "experiment" : ""), \
+            \
+        for [i=1:words(models)] for [k=1:8] (j=word("-6 6 14 20 27 34 40 47", k), (word(samples, i) . "/x_by_h_".j."_mag(U).xy")) \
+        u (j+(\$2/$Uref)*10):(\$1/href) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t (k == 1 ? word(models, i) : ""),\
+        
+ 
+
+        
+EOF
+}
+
+plot_uu() {
+    local sampleDir="$1" Uref="$2" experimentalDataDir="$3" cases="$4" href="1" image="plots/uu.png"
+    
+    lowerWallDirs="$5"
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+    
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,10" size 1000, 500
+        set key bottom left font ",10"  # Set the legend font size to 10
+        set grid
+        set key bottom left
+        set yrange [0:4.7]
+        set xrange [-10:52]
+        set xlabel "x/H + 10U/U_b"
+        set ylabel "y/H"
+        set output "$image"
+        set lmargin 7.5
+        set rmargin 3
+        set tmargin 1.5
+        set bmargin 1.5
+        set format x "%.1f"
+        set format y "%.1f"
+        set size ratio 0.3
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${sampleDir[*]}"
+        lowerWall="${lowerWallDirs[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        for [i=1:words(models)]  ( (word(lowerWall, 1) . "/p_patch_lowerWall.raw")) using 1:2 with lines notitle lw 2 lc rgb 'black', \
+         '' u 1:2 with filledcurves y1=0 lc rgb 'gray' notitle,\
+        for [k=1:8] (j=word("-6 6 14 20 27 34 40 47", k), "$experimentalDataDir/f_uu%.x".j) \
+            u (j+(\$2)*500):(\$1/href) ls 5 t (k == 1 ? "experiment" : ""), \
+            \
+        for [i=1:words(models)] for [k=1:8] (j=word("-6 6 14 20 27 34 40 47", k), (word(samples, i) . "/x_by_h_".j."_turbulenceProperties:R.xy")) \
+        u (j+(\$2/($Uref*$Uref))*500):(\$1/href) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t (k == 1 ? word(models, i) : "")
+        
+EOF
+}
+
+
+plot_vv() {
+    local sampleDir="$1" Uref="$2" experimentalDataDir="$3" cases="$4" href="1" image="plots/vv.png"
+   
+    lowerWallDirs="$5"
+
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+      gnuplot <<EOF
+        set terminal pngcairo font "helvetica,10" size 1000, 500
+        set key bottom left font ",10"  # Set the legend font size to 10
+        set grid
+        set key bottom left
+        set yrange [0:4.7]
+        set xrange [-10:52]
+        set xlabel "x/H + 10U/U_b"
+        set ylabel "y/H"
+        set output "$image"
+        set lmargin 7.5
+        set rmargin 3
+        set tmargin 1.5
+        set bmargin 1.5
+        set format x "%.1f"
+        set format y "%.1f"
+        set size ratio 0.3
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${sampleDir[*]}"
+        lowerWall="${lowerWallDirs[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        for [i=1:words(models)]  ( (word(lowerWall, 1) . "/p_patch_lowerWall.raw")) using 1:2 with lines notitle lw 2 lc rgb 'black', \
+         '' u 1:2 with filledcurves y1=0 lc rgb 'gray' notitle,\
+        for [k=1:8] (j=word("-6 6 13 19 26 33 40 47", k), "$experimentalDataDir/f_vv%.x".j) \
+            u (j+(\$2)*500):(\$1/href) ls 5 t (k == 1 ? "experiment" : ""), \
+            \
+        for [i=1:words(models)] for [k=1:8] (j=word("-6 6 13 19 26 33 40 47", k), (word(samples, i) . "/x_by_h_".j."_turbulenceProperties:R.xy")) \
+        u (j+(\$5/($Uref*$Uref))*500):(\$1/href) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t (k == 1 ? word(models, i) : "")
+        
+EOF
+}
+
+plot_uv() {
+    local sampleDir="$1" Uref="$2" experimentalDataDir="$3" cases="$4" href="1" image="plots/uv.png"
+    
+    lowerWallDirs="$5"
+
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+        gnuplot <<EOF
+        set terminal pngcairo font "helvetica,10" size 1000, 500
+        set key bottom left font ",10"  # Set the legend font size to 10
+        set grid
+        set key bottom left
+        set yrange [0:4.7]
+        set xrange [-10:52]
+        set xlabel "x/H + 10U/U_b"
+        set ylabel "y/H"
+        set output "$image"
+        set lmargin 7.5
+        set rmargin 3
+        set tmargin 1.5
+        set bmargin 1.5
+        set format x "%.1f"
+        set format y "%.1f"
+        set size ratio 0.3
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${sampleDir[*]}"
+        lowerWall="${lowerWallDirs[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        for [i=1:words(models)]  ( (word(lowerWall, 1) . "/p_patch_lowerWall.raw")) using 1:2 with lines notitle lw 2 lc rgb 'black', \
+         '' u 1:2 with filledcurves y1=0 lc rgb 'gray' notitle,\
+        for [k=1:8] (j=word("-6 6 13 19 26 33 40 47", k), "$experimentalDataDir/f_uv%.x".j) \
+            u (j+(\$2)*500):(\$1/href) ls 5 t (k == 1 ? "experiment" : ""), \
+            \
+        for [i=1:words(models)] for [k=1:8] (j=word("-6 6 13 19 26 33 40 47", k), (word(samples, i) . "/x_by_h_".j."_turbulenceProperties:R.xy")) \
+        u (j+(\$3/($Uref*$Uref))*500):(\$1/href) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t (k == 1 ? word(models, i) : "")
+        
+EOF
+}
+
+plot_cp_lowerWall() {
+    local  Uref="$2" experimentalDataDir="$3" cases="$4"  pRefDirs="$pRefDirs"  href="1" image="plots/cp_lowerWall.png"
+    
+     lowerWallValuesDirs="$1"
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+    m=0
+    for case in $cases
+    do
+        pRef[$m]=$(awk '{print $2}' "$pRefDirs/pRef_p.xy")
+        m=$(($m+1))
+    done
+
+
+
+
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,15" size 1000, 1000
+        set grid
+        set key bottom right
+        set yrange [-0.2:1]
+        set xrange [-20:70]
+        set xlabel "x/H"
+        set ylabel "cp"
+        set output "$image"
+        set lmargin 4.5
+        set rmargin 4.5
+        set tmargin 4.5
+        set bmargin 4.5
+        set format x "%.1f"
+        set format y "%.1f"
+        set size ratio 1
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${lowerWallValuesDirs[*]}"
+        pRef="${pRef[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        "$experimentalDataDir/g_cp%.y00"  u ((\$1)):(\$2/href) ls 5 t "experiment", \
+            \
+        for [i=1:words(models)]  ( (word(samples, i) . "/p_patch_lowerWall.raw"))\
+        u (\$1):((\$4-word(pRef, i))/(0.5*Uref*Uref)) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t word(models, i)
+        
+        
+EOF
+}
+
+plot_cp_upperWall() {
+    local  Uref="$2" experimentalDataDir="$3" cases="$4"  pRefDirs="$pRefDirs"  href="1" image="plots/cp_upperWall.png"
+    
+    upperWallValuesDirs="$1"
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+    m=0
+    for case in $cases
+    do
+        pRef[$m]=$(awk '{print $2}' "$pRefDirs/pRef_p.xy")
+        m=$(($m+1))
+    done
+
+    num_entries=$(echo "$cases" | wc -w)
+
+
+ 
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,15" size 1000, 1000
+        set grid
+        set key bottom right
+        set yrange [-0.2:1]
+        set xrange [-20:70]
+        set xlabel "x/H"
+        set ylabel "cp"
+        set output "$image"
+        set lmargin 4.5
+        set rmargin 4.5
+        set tmargin 4.5
+        set bmargin 4.5
+        set format x "%.1f"
+        set format y "%.1f"
+        set size ratio 1
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${upperWallValuesDirs[*]}"
+        pRef="${pRef[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        "$experimentalDataDir/g_cp%.y10"  u ((\$1)):(\$2/href) ls 5 t "experiment", \
+            \
+        for [i=1:words(models)]  ( (word(samples, i) . "/p_patch_upperWall.raw"))\
+        u (\$1):((\$4-word(pRef, i))/(0.5*Uref*Uref)) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t word(models, i)
+        
+        
+EOF
+}
+
+plot_cf_lowerWall() {
+    local  Uref="$2" experimentalDataDir="$3" cases="$4"  pRefDirs="$pRefDirs"  href="1" image="plots/cf_lowerWall.png"
+    
+    lowerWallValuesDirs="$1"
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+    m=0
+    for case in $cases
+    do
+        pRef[$m]=$(awk '{print $2}' "$pRefDirs/pRef_p.xy")
+        m=$(($m+1))
+    done
+
+    num_entries=$(echo "$cases" | wc -w)
+    echo "Number of entries: $num_entries"
+
+
+
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,15" size 1000, 1000
+        set grid
+        set key top right font ",20" 
+        set xrange [-20:70]
+        set yrange [-2e-3:8e-3]
+        set xlabel "x/H" font ",20" 
+        set ylabel "C_f" font ",20" 
+        set output "$image"
+        set lmargin 6.5
+        set rmargin 3
+        set tmargin 3
+        set bmargin 6.5
+        set format x "%.1f"
+        set format y "%.3f"  # Plain numbers on y-axis, without exponent
+        set size ratio 1
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${lowerWallValuesDirs[*]}"
+        pRef="${pRef[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        "$experimentalDataDir/g_cf%.y00"  u ((\$1)):(\$2/href) ls 5 t "experiment", \
+            \
+        for [i=1:words(models)]  ( (word(samples, i) . "/wallShearStress_patch_lowerWall.raw"))\
+        u (\$1):(sqrt(\$4*\$4+\$5*\$5+\$6*\$6)/(0.5*Uref*Uref)) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t word(models, i)
+        
+        
+EOF
+}
+
+plot_cf_upperWall() {
+    local  Uref="$2" experimentalDataDir="$3" cases="$4"  pRefDirs="$pRefDirs"  href="1" image="plots/cf_upperWall.png"
+    
+    upperWallValuesDirs="$1"
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+    m=0
+    for case in $cases
+    do
+        pRef[$m]=$(awk '{print $2}' "$pRefDirs/pRef_p.xy")
+        m=$(($m+1))
+    done
+
+    num_entries=$(echo "$cases" | wc -w)
+    echo "Number of entries: $num_entries"
+
+
+
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,15" size 1000, 1000
+        set grid
+        set key top right
+        set xrange [-20:70]
+        set yrange [-2e-3:8e-3]
+        set xlabel "x/H"
+        set ylabel "C_f"
+        set output "$image"
+        set lmargin 6.5
+        set rmargin 4.5
+        set tmargin 4.5
+        set bmargin 4.5
+        set format x "%.1f"
+        set format y "%.3f"  # Plain numbers on y-axis, without exponent
+        set size ratio 1
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${upperWallValuesDirs[*]}"
+        pRef="${pRef[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        "$experimentalDataDir/g_cf%.y10"  u ((\$1)):(\$2/href) ls 5 t "experiment", \
+            \
+        for [i=1:words(models)]  ( (word(samples, i) . "/wallShearStress_patch_upperWall.raw"))\
+        u (\$1):(sqrt(\$4*\$4+\$5*\$5+\$6*\$6)/(0.5*Uref*Uref)) w l lw 1.5  lt 1 dt i lc rgb word(colors, i) t word(models, i)
+        
+        
+EOF
+}
+
+plot_sperationZone() {
+    local  experimentalDataDir="$2" cases="$3" image="plots/sperationZone.png"
+    
+    sperationZoneDirs="$1"
+    lowerWallDirs="$4"
+    m=0
+    for case in $cases
+    do
+        modelNames[$m]="$case"
+        m=$(($m+1))
+    done
+
+
+
+    gnuplot <<EOF
+        set terminal pngcairo font "helvetica,15" size 1000, 500
+        set grid
+        set key top right
+        set xrange [-25:35]
+        set yrange [0:4.7]
+        set xlabel "x/H"
+        set ylabel "y/H"
+        set output "$image"
+        set lmargin 6.5
+        set rmargin 4.5
+        set tmargin 4.5
+        set bmargin 4.5
+        set format x "%.1f"
+        set format y "%.0f"  # Plain numbers on y-axis, without exponent
+        set size ratio 0.3
+
+        # OpenFOAM
+        models="${cases[*]}"
+        samples="${sperationZoneDirs[*]}"
+        lowerWall="${lowerWallDirs[*]}"
+        pRef="${pRef[*]}"
+        Uref="$Uref"
+        href="$href" 
+        colors = "dark-red  dark-green blue magenta red"
+        set style line 5 lt rgb "black" lw 1 pt 6
+        
+
+       
+        plot \
+        for [i=1:words(models)]  ( (word(lowerWall, 1) . "/p_patch_lowerWall.raw")) using 1:2 with lines notitle lw 2 lc rgb 'black', \
+         '' u 1:2 with filledcurves y1=0 lc rgb 'gray' notitle,\
+        "$experimentalDataDir/separation"  u ((\$1)):(\$2) ls 5 t "experiment", \
+            \
+        for [i=1:words(models)]  ( (word(samples, i) . "/Ux_isoSurfcae1.raw"))\
+        u (\$1):(\$2)  lt 1 dt i lc rgb word(colors, i) t word(models, i)
+        
+        
+EOF
+}
+
+#------------------------------------------------------------------------------------------------------------------------
+command -v gnuplot >/dev/null || { echo "FOAM FATAL ERROR: gnuplot not found - skipping graph creation" >&2; exit 1; }
+command -v awk >/dev/null || { echo "FOAM FATAL ERROR: awk not found - skipping graph creation" >&2; exit 1; }
+
+#---------------------------------------------------------------------------------------
+mkdir "plots"
+
+planerDiffuserCases="turbulentIcoFoam  pisoFoam simpleFoam"
+# planerDiffuserCases=" SpalartAllmaras kOmegaSST LaunderSharmaKE"
+
+sampleDir=()
+for case in $planerDiffuserCases; do
+    timeDir=$(foamListTimes -case $case -latestTime)
+    sampleDir+=("$case/postProcessing/sample/$timeDir")
+done
+
+num_entries=${#sampleDir[@]}
+echo "Number of entries: $num_entries"
+
+   for i in $(seq 1 $num_entries)
+    do
+    echo "${sampleDir[i-1]}"
+    done
+
+# cp cf related calculations
+upperWallValuesDirs=()
+for case in $planerDiffuserCases; do
+    timeDir=$(foamListTimes -case $case -latestTime)
+    upperWallValuesDirs+=("$case/postProcessing/upperWallValues/surface/$timeDir")
+done
+
+lowerWallValuesDirs=()
+for case in $planerDiffuserCases; do
+    timeDir=$(foamListTimes -case $case -latestTime)
+    lowerWallValuesDirs+=("$case/postProcessing/lowerWallValues/surface/$timeDir")
+done
+
+
+sperationZoneDirs=()
+for case in $planerDiffuserCases; do
+    timeDir=$(foamListTimes -case $case -latestTime)
+    sperationZoneDirs+=("$case/postProcessing/isoSurface/$timeDir")
+done
+
+
+
+   for i in $(seq 1 $num_entries)
+    do
+    echo "${upperWallValuesDirs[i-1]}"
+    done
+
+
+pRefDirs=()
+for case in $planerDiffuserCases; do
+    timeDir=$(foamListTimes -case $case -latestTime)
+    pRefDirs+=("$case/postProcessing/samplepRef/$timeDir")
+done
+
+
+
+
+experimentalDataDir="DiffuserExperimentalData"
+Uref="0.27"
+# Uref=$(foamDictionary $resultsDir/0/U -entry internalField | sed 's/^.*(\s*\([^ ]*\).*/\1/g')
+
+echo "# Plots the U profiles"
+plot_U "${sampleDir[*]}" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$lowerWallValuesDirs"
+
+echo "# Plots the uu profiles"
+plot_uu "${sampleDir[*]}" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$lowerWallValuesDirs"
+
+echo "# Plots the vv profiles"
+plot_vv "${sampleDir[*]}" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$lowerWallValuesDirs"
+
+echo "# Plots the uv profiles"
+plot_uv "${sampleDir[*]}" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$lowerWallValuesDirs"
+
+
+echo "# Plots the cp_lowerWall profiles"
+plot_cp_lowerWall "$lowerWallValuesDirs" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$pRefDirs"
+
+
+
+echo "# Plots the cp_upperWall profiles"
+plot_cp_upperWall "$upperWallValuesDirs" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$pRefDirs"
+
+
+echo "# Plots the cf_lowerWall profiles"
+plot_cf_lowerWall "$lowerWallValuesDirs" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$pRefDirs"
+
+
+
+echo "# Plots the cf_upperWall profiles"
+plot_cf_upperWall "$upperWallValuesDirs" "$Uref" "$experimentalDataDir" "$planerDiffuserCases" "$pRefDirs"
+
+
+
+
+echo "# Plots the speration Zone profiles"
+plot_sperationZone "$sperationZoneDirs" "$experimentalDataDir" "$planerDiffuserCases" "$lowerWallValuesDirs"
+
+

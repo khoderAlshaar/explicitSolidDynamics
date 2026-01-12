@@ -1,0 +1,20 @@
+type            sets;
+libs            ("libsampling.so");
+
+setFormat raw;
+interpolationScheme cellPoint;
+sets
+(
+    circleIntersection
+    {
+        type arcUniform;
+        axis xy;   // Choose axis (x, y, or z)
+        centre (0 0 0.01);  // Circle center
+        normal (0 0 1);    // Defines arc orientation
+        radial (0.0075 0 0.01);     // Circle radius
+        startAngle 0;
+        endAngle 270;
+        nPoints 100;    // Number of sample points
+    }
+);
+fields (sigmaEq);  // Specify fields to extract
